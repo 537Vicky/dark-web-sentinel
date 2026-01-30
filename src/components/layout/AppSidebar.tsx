@@ -6,14 +6,19 @@ import {
   Settings, 
   Shield,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Home,
+  LogOut
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
+  { title: "Home", url: "/home", icon: Home },
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Monitoring", url: "/monitoring", icon: Monitor },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
@@ -23,6 +28,13 @@ const navItems = [
 
 export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <aside
@@ -65,6 +77,25 @@ export function AppSidebar() {
           </NavLink>
         ))}
       </nav>
+
+      {/* User Section */}
+      {user && !collapsed && (
+        <div className="p-3 border-t border-border">
+          <div className="px-3 py-2 rounded-lg bg-accent/50 mb-2">
+            <p className="text-xs text-muted-foreground">Signed in as</p>
+            <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleSignOut}
+            className="w-full justify-start gap-2 text-muted-foreground hover:text-destructive"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </Button>
+        </div>
+      )}
 
       {/* Collapse Toggle */}
       <div className="p-3 border-t border-border">

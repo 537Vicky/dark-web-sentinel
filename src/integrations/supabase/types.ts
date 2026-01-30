@@ -14,16 +14,232 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          created_at: string
+          id: string
+          is_reviewed: boolean
+          keyword_id: string
+          keyword_text: string
+          matched_content: string | null
+          message: string
+          session_id: string
+          severity: string
+          source_id: string
+          source_name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_reviewed?: boolean
+          keyword_id: string
+          keyword_text: string
+          matched_content?: string | null
+          message: string
+          session_id: string
+          severity?: string
+          source_id: string
+          source_name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_reviewed?: boolean
+          keyword_id?: string
+          keyword_text?: string
+          matched_content?: string | null
+          message?: string
+          session_id?: string
+          severity?: string
+          source_id?: string
+          source_name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_keyword_id_fkey"
+            columns: ["keyword_id"]
+            isOneToOne: false
+            referencedRelation: "keywords"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "monitoring_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "dark_web_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dark_web_sources: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          last_scanned_at: string | null
+          name: string
+          risk_level: string
+          source_type: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_scanned_at?: string | null
+          name: string
+          risk_level?: string
+          source_type: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_scanned_at?: string | null
+          name?: string
+          risk_level?: string
+          source_type?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      keywords: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          keyword: string
+          keyword_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          keyword: string
+          keyword_type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          keyword?: string
+          keyword_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      monitoring_sessions: {
+        Row: {
+          alerts_generated: number
+          completed_at: string | null
+          id: string
+          keywords_count: number
+          sources_scanned: number
+          started_at: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          alerts_generated?: number
+          completed_at?: string | null
+          id?: string
+          keywords_count?: number
+          sources_scanned?: number
+          started_at?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          alerts_generated?: number
+          completed_at?: string | null
+          id?: string
+          keywords_count?: number
+          sources_scanned?: number
+          started_at?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +366,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

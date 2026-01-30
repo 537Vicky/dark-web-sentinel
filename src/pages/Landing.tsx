@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Shield, ArrowRight, CheckCircle, Zap, Eye, Lock, Globe } from "lucide-react";
+import { Shield, ArrowRight, CheckCircle, Zap, Eye, Lock, Globe, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const features = [
@@ -49,10 +49,13 @@ export default function Landing() {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/dashboard">
-                <Button variant="ghost">Dashboard</Button>
+              <Link to="/login">
+                <Button variant="ghost" className="gap-2">
+                  <User className="w-4 h-4" />
+                  Sign In
+                </Button>
               </Link>
-              <Link to="/dashboard">
+              <Link to="/register">
                 <Button className="gap-2">
                   Get Started
                   <ArrowRight className="w-4 h-4" />
@@ -84,15 +87,15 @@ export default function Landing() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: "300ms" }}>
-            <Link to="/dashboard">
+            <Link to="/register">
               <Button size="lg" className="gap-2 text-lg px-8 py-6 animate-glow">
                 Start Monitoring
                 <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
-            <Link to="/analytics">
+            <Link to="/login">
               <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                View Analytics
+                Sign In
               </Button>
             </Link>
           </div>
@@ -160,9 +163,9 @@ export default function Landing() {
                 </div>
               ))}
             </div>
-            <Link to="/dashboard" className="inline-block mt-8">
+            <Link to="/register" className="inline-block mt-8">
               <Button size="lg" className="gap-2">
-                Access Dashboard
+                Create Free Account
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>

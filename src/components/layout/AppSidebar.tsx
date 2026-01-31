@@ -16,6 +16,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navItems = [
   { title: "Home", url: "/home", icon: Home },
@@ -97,13 +98,14 @@ export function AppSidebar() {
         </div>
       )}
 
-      {/* Collapse Toggle */}
-      <div className="p-3 border-t border-border">
+      {/* Theme Toggle & Collapse */}
+      <div className="p-3 border-t border-border flex items-center justify-between">
+        <ThemeToggle />
         <Button
           variant="ghost"
-          size="sm"
+          size="icon"
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full justify-center"
+          className="w-9 h-9"
         >
           {collapsed ? (
             <ChevronRight className="w-4 h-4" />

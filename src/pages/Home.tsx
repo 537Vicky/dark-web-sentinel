@@ -99,22 +99,14 @@ export default function Home() {
 
       if (sessionError) throw sessionError;
 
-      // Call edge function to scan
-      const { data, error: scanError } = await supabase.functions.invoke("scan-keywords", {
-        body: {
-          session_id: session.id,
-          keyword_ids: insertedKeywords.map((k) => k.id),
+      // Navigate to scanning page with session info
+      navigate("/scanning", {
+        state: {
+          sessionId: session.id,
+          keywordIds: insertedKeywords.map((k) => k.id),
+          keywordValues: keywords.map((k) => k.value),
         },
       });
-
-      if (scanError) throw scanError;
-
-      toast({
-        title: "Scan Complete",
-        description: `Found ${data.alerts_count} potential exposures across ${data.sources_scanned} sources.`,
-      });
-
-      navigate("/dashboard");
     } catch (error: any) {
       console.error("Scanning error:", error);
       toast({
@@ -122,7 +114,6 @@ export default function Home() {
         description: error.message || "An error occurred during scanning.",
         variant: "destructive",
       });
-    } finally {
       setIsScanning(false);
     }
   };

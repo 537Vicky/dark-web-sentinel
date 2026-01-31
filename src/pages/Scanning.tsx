@@ -167,11 +167,13 @@ export default function Scanning() {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const currentSource = sources.find(s => s.status === "scanning");
+
   return (
     <DashboardLayout>
       <div className="p-6 lg:p-8 max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12 animate-slide-up">
+        <div className="text-center mb-8 animate-slide-up">
           <div className="relative inline-block mb-6">
             <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center animate-pulse-slow">
               <Shield className="w-12 h-12 text-primary animate-glow" />
@@ -189,6 +191,19 @@ export default function Scanning() {
               : currentPhase}
           </p>
         </div>
+
+        {/* Current Source Being Scanned - Prominent Display */}
+        {currentSource && !isComplete && (
+          <div className="glass-card rounded-2xl p-6 mb-6 border-2 border-primary animate-pulse-slow">
+            <div className="flex items-center justify-center gap-4">
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground mb-1">Currently Scanning</p>
+                <h2 className="text-2xl font-bold text-primary">{currentSource.name}</h2>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Keywords Being Scanned */}
         {keywordValues.length > 0 && (
@@ -212,7 +227,9 @@ export default function Scanning() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-semibold text-foreground">Overall Progress</h3>
-              <p className="text-sm text-muted-foreground">Elapsed time: {formatTime(elapsedTime)}</p>
+              <p className="text-sm text-muted-foreground">
+                Elapsed time: {formatTime(elapsedTime)} • {sources.filter(s => s.status === "complete" || s.status === "found").length} of {sources.length} sources scanned
+              </p>
             </div>
             <div className="flex items-center gap-4">
               {alertsFound > 0 && (
@@ -227,9 +244,12 @@ export default function Scanning() {
           <Progress value={overallProgress} className="h-3" />
         </div>
 
-        {/* Source Grid */}
+        {/* Source Grid - Real-time Display */}
         <div className="glass-card rounded-2xl p-6 animate-slide-up" style={{ animationDelay: "200ms" }}>
-          <h3 className="font-semibold text-foreground mb-4">Dark Web Sources</h3>
+          <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+            <Globe className="w-4 h-4" />
+            Dark Web Sources ({sources.length} total)
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sources.map((source, index) => {
               const Icon = source.icon;
@@ -238,12 +258,12 @@ export default function Scanning() {
                   key={source.id}
                   className={`relative p-4 rounded-xl border-2 transition-all duration-300 overflow-hidden animate-fade-in ${
                     source.status === "scanning"
-                      ? "border-primary bg-primary/5 shadow-lg shadow-primary/20"
+                      ? "border-primary bg-primary/5 shadow-lg shadow-primary/20 scale-[1.02]"
                       : source.status === "found"
                       ? "border-destructive bg-destructive/5"
                       : source.status === "complete"
                       ? "border-success bg-success/5"
-                      : "border-border bg-accent/30"
+                      : "border-border bg-accent/30 opacity-60"
                   }`}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
@@ -280,12 +300,14 @@ export default function Scanning() {
                         />
                       </div>
                       <div>
-                        <p className="font-medium text-foreground">{source.name}</p>
+                        <p className={`font-medium ${source.status === "scanning" ? "text-primary" : "text-foreground"}`}>
+                          {source.name}
+                        </p>
                         <p className="text-xs text-muted-foreground">
                           {source.status === "pending" && "Waiting..."}
-                          {source.status === "scanning" && "Scanning..."}
-                          {source.status === "complete" && "No threats found"}
-                          {source.status === "found" && `${source.matchCount} match${source.matchCount !== 1 ? "es" : ""} found!`}
+                          {source.status === "scanning" && "Scanning in progress..."}
+                          {source.status === "complete" && "✓ No threats found"}
+                          {source.status === "found" && `⚠ ${source.matchCount} match${source.matchCount !== 1 ? "es" : ""} found!`}
                         </p>
                       </div>
                     </div>
@@ -321,6 +343,10 @@ export default function Scanning() {
         {/* Complete Message */}
         {isComplete && (
           <div className="text-center mt-8 animate-slide-up">
+            <div className="inline-flex items-center gap-2 text-success mb-2">
+              <CheckCircle className="w-5 h-5" />
+              <span className="font-medium">All sources scanned successfully</span>
+            </div>
             <p className="text-muted-foreground">
               Redirecting to dashboard...
             </p>

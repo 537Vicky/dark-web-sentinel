@@ -8,7 +8,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import DotGrid from "@/components/backgrounds/DotGrid";
 
 const keywordTypes = [
   { id: "password", label: "Password", icon: Key, placeholder: "e.g., mypassword123" },
@@ -121,17 +120,7 @@ export default function Home() {
 
   return (
     <DashboardLayout>
-      {/* Dot Grid Background */}
-      <DotGrid 
-        dotSize={5}
-        gap={15}
-        proximity={120}
-        shockRadius={290}
-        shockStrength={8}
-        returnDuration={1.5}
-      />
-      
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 animate-slide-up">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">

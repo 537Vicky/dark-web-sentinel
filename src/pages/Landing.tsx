@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Shield, ArrowRight, CheckCircle, Zap, Eye, Lock, Globe, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import DotGrid from "@/components/backgrounds/DotGrid";
 
 const features = [
   {
@@ -28,7 +29,17 @@ const features = [
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      {/* Dot Grid Background */}
+      <DotGrid 
+        dotSize={5}
+        gap={15}
+        proximity={120}
+        shockRadius={290}
+        shockStrength={8}
+        returnDuration={1.5}
+      />
+      
       {/* Hero Section */}
       <header className="relative overflow-hidden">
         {/* Background gradient */}

@@ -35,7 +35,7 @@ export default function Landing() {
         dotSize={5}
         gap={15}
         proximity={120}
-        shockRadius={270}
+        shockRadius={290}
         shockStrength={8}
         returnDuration={1.5}
       />
